@@ -64,6 +64,13 @@ skirt_grip_angles = [ [ 42.0-180.0, 79.0-180.0 ],
                       [ 162.5-180.0, -162.5-180.0 ] ];
 /* skirt_grip_angles = [ ]; */
 
+// scirt cutouts for the board assembly grips, [ angle width ]
+board_cuts = [ [ -25.5, 3.0 ], [ -125.5, 3.0 ],
+               [  25.5, 3.0 ], [  125.5, 3.0 ],];
+board_cut_d = 2.5; // 'depth' from the top of the skirt
+board_cut_h = 0.6; // height of the cuts
+
+
 
 // board assembly directors, angle and h to the skirt top
 board_dirs = [ [ 0.0, 0.0 ], [ 205.0-0.5, 0.0 ] ];
@@ -97,6 +104,11 @@ sag_r = 1.0; // radius increase
 sag_r2 = 3.3; // partial sagging radius
 sag_a0 = -5.0; // partial sagging start angle
 sag_a1 = -55.0; // partial sagging end angle
+
+// reset button hole
+reset_a = -138.5; // angle
+reset_r = 9.7; // distance from center
+reset_hr = 0.7; // hole radius
 
 
 /**
@@ -305,6 +317,18 @@ module skirt( )
           }
         }
       }
+
+      // cuts for the board assembly grips
+      for ( cut = board_cuts )
+      {
+        rotate( [ 0, 0, cut[0] ] )
+        {
+          translate( [ 0, skirt_r, board_cut_d ] )
+          {
+            cube( [ cut[1], skirt_r, board_cut_h ], center=true );
+          }
+        }
+      }
     }
   }
 }
@@ -376,6 +400,15 @@ module supporting_disk_cutouts( )
   translate( [ 0, 0, -sh ] )
   {
     cylinder( h=sh, r=skirt_inr );
+  }
+
+  // reset button hole
+  rotate( [ 0, 0, reset_a ] )
+  {
+    translate( [ 0, reset_r, 0 ] )
+    {
+      cylinder( h=sh*2, r=reset_hr, center=true );
+    }
   }
 }
 
