@@ -14,17 +14,17 @@ rcut  = 7.3; // radius of the cuts in the plug
 rr = 1.8;  // rounding at the bottom
 ru = 0.2;  // rounding at the top
 hc = 0.96; // start height for both cuts
-h1 = 2.04; // first cut height
-h2 = 1.22; // second cut height
+h1 = 2.16; // first cut height
+h2 = 1.32; // second cut height
 cc = 0.8;  // cut corner
-hd = 1.44;  // supporting disk height
+hd = 1.20;  // supporting disk height
 rd = 25.6/2; // supporting disk radius
 support_d = 11.0; // supporting distance -- const h when varying rounding
 support_r = rd*8; // rounding of the supporting disk
 sh = 3.60; // skirt height
-skirt_r = 11.7; // skirt radius (11.7 is measured, 0.3 correction)
-skirt_inr = skirt_r - 0.6; // inner radius (0.6 measured, 0.8 two layers)
-skirt_top = 4.80; // = -z of the skirt top
+skirt_r = 11.7-0.05; // skirt radius (11.7 is measured, 0.05 oversintering)
+skirt_inr = skirt_r - 0.5; // inner radius (0.6 measured, 0.5 oversintering)
+skirt_top = 4.56; // = -z of the skirt top
 skirt_cham = 0.12*4; // skirt chamfer height (not used now)
 
 // Cutout angles
@@ -45,7 +45,7 @@ lock_r2 = rd;   // lock crests end
 cut_o = 5; // offset, where the cutouts start
 cut_l = 2; // length of the cutouts
 cut_r  = 4;  // radius of the cutout itself
-cut_d = 0.24; // depth of the cutouts
+cut_d = 0.36; // depth of the cutouts
 cut_a  = [ -64, -153, 118, 27 ]; // angles
 
 // Skirt cuts, angle and depth for each
@@ -54,11 +54,11 @@ skirt_cuts = [ [ 13.0, 1.0 ], [ 42.0, 2.2 ], [ 79.0, 2.2 ],
                [ -13.0, 1.0 ], [ -42.0, 2.2 ], [ -79.0, 2.2 ],
                [ -136, 1.0 ], [ -162.5, 2.2 ] ];
 /* skirt_cuts = [ ]; */
-skirt_cut_w = 1.0; // width of each cut
+skirt_cut_w = 0.8; // width of each cut
 
 // skirt grip height, thickness and angles
 skirt_grip_h = 0.8;
-skirt_grip_t = 0.4;
+skirt_grip_t = 0.6;
 skirt_grip_angles = [ [ 42.0-180.0, 79.0-180.0 ],
                       [ -79.0-180.0, -42.0-180.0 ],
                       [ 162.5-180.0, -162.5-180.0 ] ];
@@ -86,7 +86,7 @@ board_sup_h = 2.1; // height from top of the skirt
 cont_r0 = 9.0;
 cont_r1 = 10.6;
 ccrad_d = 0.36; // contact cradle depth
-ccrad_r0 = 8.3; // contact cradle start
+ccrad_r0 = 8.1; // contact cradle start
 ccrad_r1 = 11.0; // contact cradle end
 
 contact_angles = [ [ -72.9, -108.5 ], [ 71.2, 34.6  ] ];
