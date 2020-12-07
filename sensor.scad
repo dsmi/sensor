@@ -7,20 +7,20 @@ $fn = 120;
 //  Layer thickness: 0.08, 0.12, 0.16... in increments of 0.04mm
 
 // Units are mm!
-hplug = 7.8; // Height of the bottom 'plug'
+hplug = 7.68;   // Height of the bottom 'plug'
 r1    = 7.8-0.2; // Bottom radius of the plug (-0.2 better fit)
 r2    = 9.4-0.2; // Upper radius of the plug (-0.2 better fit)
 rcut  = 7.3; // radius of the cuts in the plug
 rr = 1.8;  // rounding at the bottom
 ru = 0.2;  // rounding at the top
 hc = 0.96; // start height for both cuts
-h1 = 2.16; // first cut height
-h2 = 1.32; // second cut height
+h1 = 2.40; // first cut height
+h2 = 1.44;  // second cut height
 cc = 0.8;  // cut corner
 hd = 1.20;  // supporting disk height
 rd = 25.6/2; // supporting disk radius
 support_d = 11.0; // supporting distance -- const h when varying rounding
-support_r = rd*8; // rounding of the supporting disk
+support_r = rd*12; // rounding of the supporting disk
 sh = 3.60; // skirt height
 skirt_r = 11.7-0.05; // skirt radius (11.7 is measured, 0.05 oversintering)
 skirt_inr = skirt_r - 0.5; // inner radius (0.6 measured, 0.5 oversintering)
