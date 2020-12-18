@@ -8,10 +8,10 @@ $fn = 120;
 
 // Units are mm!
 hplug = 7.68;   // Height of the bottom 'plug'
-r1    = 7.8-0.2; // Bottom radius of the plug (-0.2 better fit)
-r2    = 9.4-0.2; // Upper radius of the plug (-0.2 better fit)
+r1    = 7.85; // Bottom radius of the plug
+r2    = 9.2; // Upper radius of the plug
 rcut  = 7.3; // radius of the cuts in the plug
-rr = 1.8;  // rounding at the bottom
+rr = 2.0;  // rounding at the bottom
 ru = 0.2;  // rounding at the top
 hc = 0.96; // start height for both cuts
 h1 = 2.40; // first cut height
