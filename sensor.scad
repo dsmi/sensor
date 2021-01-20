@@ -22,8 +22,8 @@ rd = 25.6/2; // supporting disk radius
 support_d = 11.0; // supporting distance -- const h when varying rounding
 support_r = rd*12; // rounding of the supporting disk
 sh = 3.60; // skirt height
-skirt_r = 11.7-0.05; // skirt radius (11.7 is measured, 0.05 oversintering)
-skirt_inr = skirt_r - 0.5; // inner radius (0.6 measured, 0.5 oversintering)
+skirt_r = 11.7; // skirt radius (11.7 is measured, 0.05 oversintering)
+skirt_inr = skirt_r - 0.6; // inner radius (0.6 measured, 0.5 oversintering)
 skirt_top = 4.56; // = -z of the skirt top
 skirt_cham = 0.12*4; // skirt chamfer height (not used now)
 
@@ -38,6 +38,7 @@ c2a2 = 125;
 // Lock crests (initial angles [ -120, 104, 14 ])
 lock_a  = [ -120, 105, 14 ]; // angles of the lock 'crests'
 lock_r  = 0.6;  // lock crests radius
+lock_h  = 0.72; // heigth of each crest, including radius
 lock_r1 = 8.5;  // lock crests start
 lock_r2 = rd;   // lock crests end
 
@@ -249,8 +250,11 @@ module lock_crests( )
         hull( )
         {
           lr = lock_r;
-          translate( [ 0, lock_r1 + lr, 0 ] ) { sphere( lr, $fn = 24 ); }
-          translate( [ 0, lock_r2 - lr, 0 ] ) { sphere( lr, $fn = 24 ); }
+          lh = lock_h - lock_r;
+          translate( [ 0, lock_r1 + lr, 0  ] ) { sphere( lr, $fn = 24 ); }
+          translate( [ 0, lock_r1 + lr, lh ] ) { sphere( lr, $fn = 24 ); }
+          translate( [ 0, lock_r2 - lr, 0  ] ) { sphere( lr, $fn = 24 ); }
+          translate( [ 0, lock_r2 - lr, lh ] ) { sphere( lr, $fn = 24 ); }
         }
       }
     }
