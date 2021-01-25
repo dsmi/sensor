@@ -91,7 +91,7 @@ ccrad_r0 = 8.1; // contact cradle start
 ccrad_r1 = 11.0; // contact cradle end
 
 contact_angles = [ [ -72.9, -108.5 ], [ 71.2, 34.6  ] ];
-cradle_xangle = 10;
+cradle_xangle = 8;
 cradle_angles = [ [ -72.9+cradle_xangle, -108.5-+cradle_xangle ],
                   [ 71.2+cradle_xangle, 34.6-cradle_xangle  ] ];
 
