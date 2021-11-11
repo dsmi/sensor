@@ -74,7 +74,7 @@ board_cut_h = 0.6; // height of the cuts
 
 
 // board assembly directors, angle and h to the skirt top
-board_dirs = [ [ 0.0, 0.0 ], [ 205.0-0.5, 0.0 ] ];
+board_dirs = [ [ 0.0, 0.0 ], [ 205.0-0.5, 0.96 ] ];
 dir_width = 0.8; // width of each director
 dir_r0 = skirt_inr - 0.8; // starting r of each director
 
