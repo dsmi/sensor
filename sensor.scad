@@ -38,7 +38,7 @@ c2a2 = 125;
 // Lock crests (initial angles [ -120, 104, 14 ])
 lock_a  = [ -120, 105, 14 ]; // angles of the lock 'crests'
 lock_r  = 0.6;  // lock crests radius
-lock_h  = 0.72; // heigth of each crest, including radius
+lock_h  = 0.8;  // heigth of each crest, including radius
 lock_r1 = 8.5;  // lock crests start
 lock_r2 = rd;   // lock crests end
 
