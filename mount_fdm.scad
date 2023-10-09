@@ -14,8 +14,8 @@ support_r = 25.5/2; // supporting disk radius
 support_h = 0.6;  // distance from support to base at support_r
 support_s = 25.6/2*12; // rounding of the supporting disk
 hplug = 7.44+support_h; // Height of the bottom 'plug'
-r1    = 8.2; // Bottom radius of the plug
-r2    = 9.2; // Upper radius of the plug
+r1    = 8.1; // Bottom radius of the plug
+r2    = 9.4; // Upper radius of the plug
 rr = 2.0;  // rounding at the bottom
 ru = 0.2;  // rounding at the top
 
@@ -24,11 +24,21 @@ lock_ea0 = 36; // lock entrance start angle
 lock_ea1 = 8; // lock entrance end angle
 
 // tongues which hold the sensor
-tongue_top = -1.2; // top, relative to support_h
 tongue_r0 = 7.5;  // inner radius
-tongue_r1 = 12.0; // outer radius
-tongues = [ [ 45+8, 45-8, 1.2 ], // start-end angles and thickness
-            [ 225+16, 225-16, 2.16 ] ]; 
+tongue_r1 = 10.0; // outer radius
+//
+// Fields are: start-end angles; thickness; top relative to support_h
+tongue_bodies  = [ [ 45+8,   45-8,   1.2,       -1.2 ], 
+                   [ 225+16, 225-16, 2.16-0.96, -(1.2+0.96) ] ];
+
+tongue_cutouts = [ [ 45+11,   45-11, 6, 0 ], 
+                   [ 225+19, 225-19, 6, 0 ] ];
+
+tongue_holes =   [ [ 225+6, 225-6, 6, 0 ] ];
+
+tongue_holes_r0 = 8.7;  // inner radius
+
+
 
 // Trap door, opening, clips
 tdw = 27.5;  // width
@@ -36,9 +46,9 @@ tdh = 25.5;  // height
 tdd = 27.5;  // distance between the diagonal bevels
 tdl = 3.6;   // length (depth)
 a   = 45;    // diagonal bevels angle
-tow = 22.5;  // width of the opening
-toh = 20.5;  // height of the opening
-tod = 22.5;  // distance between diagonals of the opening
+tow = 23.2;  // width of the opening
+toh = 21.2;  // height of the opening
+tod = 23.2;  // distance between diagonals of the opening
 tol = 1.25;   // length/depth of the opening (where the clips start)
 tcl = 1.6;   // length/depth of the trap door clips
 tcx = 1.2;   // how much to the clips exapnd
@@ -254,33 +264,53 @@ module support_inner( )
    }
 }
 
+module tongues( tongue_dimensions, r0 )
+{
+   difference( )
+   {
+      for ( tongue = tongue_dimensions )
+      {
+         tongue_top = tongue[3];
+         tongue_thickness = tongue[2];
+         lz = outer_h + support_h + tongue_top - tongue_thickness/2;
+         translate( [ 0, 0, lz ] )
+         {
+            pie( tongue_thickness, tongue_r1, tongue[0], tongue[1] );
+         } 
+      }
+      cylinder( r=r0, h=hplug, center=true );
+   }
+}
+
+
 difference( )
 {
    difference( )
    {
-      union( )
+      difference( )
       {
-         intersection( )
+         union( )
          {
-            support_disk( );
-            trap_door( tdw, tdh, tdd, support_h*5 );
+            // Support disk
+            intersection( )
+            {
+               support_disk( );
+               trap_door( tdw, tdh, tdd, support_h*5 );
+            }
+            // Inner part of the support
+            support_inner( );
          }
-         support_inner( );
+         // prying cutout
+         trap_door_cutout( );
       }
-      trap_door_cutout( );
+      plug_cone( );
    }
-   plug_cone( );
+   tongues( tongue_cutouts, tongue_r0 );
 }
 
 difference( )
 {
-   for ( tongue = tongues )
-   {
-      lz = tongue_top + outer_h + support_h - tongue[2]/2;
-      translate( [ 0, 0, lz ] )
-      {
-         pie( tongue[2], tongue_r1, tongue[0], tongue[1] );
-      } 
-   }
-   cylinder( r=tongue_r0, h=hplug, center=true );
+   tongues( tongue_bodies, tongue_r0 );
+   tongues( tongue_holes, tongue_holes_r0 );
 }
+
