@@ -14,7 +14,7 @@ support_r = 25.5/2; // supporting disk radius
 support_h = 0.6;  // distance from support to base at support_r
 support_s = 25.6/2*12; // rounding of the supporting disk
 hplug = 7.44+support_h; // Height of the bottom 'plug'
-r1    = 8.1; // Bottom radius of the plug
+r1    = 8.4; // Bottom radius of the plug
 r2    = 9.4; // Upper radius of the plug
 rr = 2.0;  // rounding at the bottom
 ru = 0.2;  // rounding at the top
@@ -25,20 +25,21 @@ lock_ea1 = 8; // lock entrance end angle
 
 // tongues which hold the sensor
 tongue_r0 = 7.5;  // inner radius
-tongue_r1 = 10.0; // outer radius
+tongue_r1 = 10.3; // outer radius
 //
 // Fields are: start-end angles; thickness; top relative to support_h
-tongue_bodies  = [ [ 45+8,   45-8,   1.2,       -1.2 ], 
-                   [ 225+16, 225-16, 2.16-0.96, -(1.2+0.96) ] ];
+tongue_bodies  = [ [ 45+8,   45-8,   1.2, -1.2 ], 
+                   [ 225+16, 225-16, 1.2, -(1.2+0.96) ] ];
 
-tongue_cutouts = [ [ 45+11,   45-11, 6, 0 ], 
-                   [ 225+19, 225-19, 6, 0 ] ];
+tongue_supports  = [ [ 45+8,   45-8,   0.12,       -1.2  - 1.2 + 0.12 ], 
+                   [   225+16, 225-16, 0.12, -(1.2+0.96) - 1.2 + 0.12 ] ];
+
+tongue_cutouts = [ [ 45+12,   45-12, 12, 0 ], 
+                   [ 225+20, 225-20, 12, 0 ] ];
 
 tongue_holes =   [ [ 225+6, 225-6, 6, 0 ] ];
 
 tongue_holes_r0 = 8.7;  // inner radius
-
-
 
 // Trap door, opening, clips
 tdw = 27.5;  // width
@@ -282,35 +283,49 @@ module tongues( tongue_dimensions, r0 )
    }
 }
 
-
-difference( )
+module mount( )
 {
    difference( )
    {
       difference( )
       {
-         union( )
+         difference( )
          {
-            // Support disk
-            intersection( )
+            union( )
             {
-               support_disk( );
-               trap_door( tdw, tdh, tdd, support_h*5 );
+               // Support disk
+               intersection( )
+               {
+                  support_disk( );
+                  trap_door( tdw, tdh, tdd, support_h*5 );
+               }
+               // Inner part of the support
+               support_inner( );
             }
-            // Inner part of the support
-            support_inner( );
+            // prying cutout
+            trap_door_cutout( );
          }
-         // prying cutout
-         trap_door_cutout( );
+         plug_cone( );
       }
-      plug_cone( );
+      tongues( tongue_cutouts, tongue_r0 );
    }
-   tongues( tongue_cutouts, tongue_r0 );
+
+   difference( )
+   {
+      tongues( tongue_bodies,   tongue_r0    );
+      tongues( tongue_holes, tongue_holes_r0 );
+   }
 }
 
-difference( )
-{
-   tongues( tongue_bodies, tongue_r0 );
-   tongues( tongue_holes, tongue_holes_r0 );
-}
+
+// // where we clip it if printing by parts
+// clipcs = outer_r*3;
+// clipz  = support_h + outer_h + tongue_bodies[0][3];
+
+// intersection( )
+// {
+   mount( );
+
+//    translate( [ 0, 0, clipcs/2 + clipz ] ) { cube( clipcs, center=true ); }
+// }
 
