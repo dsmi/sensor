@@ -14,7 +14,7 @@ support_r = 25.5/2; // supporting disk radius
 support_h = 0.6;  // distance from support to base at support_r
 support_s = 25.6/2*12; // rounding of the supporting disk
 hplug = 7.44+support_h; // Height of the bottom 'plug'
-r1    = 8.4; // Bottom radius of the plug
+r1    = 8.1; // Bottom radius of the plug
 r2    = 9.4; // Upper radius of the plug
 rr = 2.0;  // rounding at the bottom
 ru = 0.2;  // rounding at the top
@@ -50,9 +50,9 @@ a   = 45;    // diagonal bevels angle
 tow = 23.2;  // width of the opening
 toh = 21.2;  // height of the opening
 tod = 23.2;  // distance between diagonals of the opening
-tol = 1.25;   // length/depth of the opening (where the clips start)
+tol = 1.1;   // length/depth of the opening (where the clips start)
 tcl = 1.6;   // length/depth of the trap door clips
-tcx = 1.2;   // how much to the clips exapnd
+tcx = 0.6;   // how much to the clips exapnd
 
 // support disc cutout (to remove the sensor) width
 dcw = 2.8;
@@ -237,7 +237,9 @@ module trap_door_clips( w, h, d, l, x )
       wl = 0.08; // length of the wide part of the clips
       hull( )
       {
-         translate( [ 0, 0, l/2 - wl/2 ] )
+         // offset by x/2 to make upper edge 45 degrees so it
+         // can be printed wo support
+         translate( [ 0, 0, l/2 - wl/2 - x/2 ] )
          {
             cube( [ w+x, h+x, wl ], true );
          }
