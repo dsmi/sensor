@@ -8,8 +8,8 @@ $fn = 600;
 //  Layer thickness: 0.08, 0.12, 0.16... in increments of 0.04mm
 
 // Units are mm!
-outer_r   = 30/2; // outer disk radius
-outer_h   = 0.2;//2.76; // outer disk height
+outer_r   = 25.5/2; // outer disk radius (same as support here)
+outer_h   = 0.0; // outer disk height. Level with the trap door top
 support_r = 25.5/2; // supporting disk radius
 support_h = 0.6;  // distance from support to base at support_r
 support_s = 25.6/2*12; // rounding of the supporting disk
@@ -28,16 +28,13 @@ tongue_r0 = 7.5;  // inner radius
 tongue_r1 = 10.3; // outer radius
 //
 // Fields are: start-end angles; thickness; top relative to support_h
-tongue_bodies  = [ [ 45+8,   45-8,   1.2, -1.2 ], 
-                   [ 225+16, 225-16, 1.2, -(1.2+0.96) ] ];
+tongue_bodies  = [ [ 45+10,   45-10,   1.2, -1.2 ], 
+                   [ 225+18, 225-18, 1.2, -(1.2+0.96) ] ];
 
-tongue_supports  = [ [ 45+8,   45-8,   0.12,       -1.2  - 1.2 + 0.12 ], 
-                   [   225+16, 225-16, 0.12, -(1.2+0.96) - 1.2 + 0.12 ] ];
+tongue_cutouts = [ [ 45+15,   45-15, 12, 0 ], 
+                   [ 225+23, 225-23, 12, 0 ] ];
 
-tongue_cutouts = [ [ 45+12,   45-12, 12, 0 ], 
-                   [ 225+20, 225-20, 12, 0 ] ];
-
-tongue_holes =   [ [ 225+6, 225-6, 6, 0 ] ];
+tongue_holes =   [ [ 225+8, 225-8, 6, 0 ] ];
 
 tongue_holes_r0 = 8.7;  // inner radius
 
@@ -115,9 +112,13 @@ module support_disk( )
    supa = asin( support_r/support_s );
 
    outz = outer_h + support_s*cos(supa); // z of the outer rounding sphere
+
+   // bottom of the outer disk, lowest point of the outer sphere
+   outb = outz - support_s;
+   
    difference( )
    {
-      cylinder( h=outer_h, r=outer_r );
+      translate( [ 0, 0, outb ] ) cylinder( h=support_r, r=outer_r );
       translate( [ 0, 0, outz ] ) sphere( r=support_s/*, $fn=400*/ );
    }
 
@@ -134,7 +135,8 @@ module support_disk( )
    
    difference( )
    {
-      cylinder( h=suph*2.0, r=support_r );
+      translate( [ 0, 0, outb ] ) cylinder( h=support_r, r=support_r );
+      
       translate( [ 0, 0, supz ] ) sphere( r=support_s/*, $fn=400*/ );
 
       for ( ang = lock_a )
@@ -191,7 +193,7 @@ module trap_door_cutout( )
 {
    // Length of the cutting box, we just need some large
    // enough value
-   l = outer_r;
+   l = tdh;
 
    // Distance from the center to cutout
    r = tdh/2 - 1;
@@ -295,14 +297,20 @@ module mount( )
          {
             union( )
             {
-               // Support disk
+               // Support disk, bounded by the trap door
                intersection( )
                {
                   support_disk( );
                   trap_door( tdw, tdh, tdd, support_h*5 );
                }
-               // Inner part of the support
-               support_inner( );
+               
+               // Inner part of the support. Subtract (convex hull of)
+               // supporting disk from it so we can lower the disk
+               difference( )
+               {
+                  support_inner( );
+                  hull( ) { support_disk( ); }
+               }
             }
             // prying cutout
             trap_door_cutout( );
@@ -321,13 +329,15 @@ module mount( )
 
 
 // // where we clip it if printing by parts
-// clipcs = outer_r*3;
+// clipcs = tdw*3;
 // clipz  = support_h + outer_h + tongue_bodies[0][3];
 
-// intersection( )
+// difference( )
 // {
-   mount( );
+//    mount( );
 
 //    translate( [ 0, 0, clipcs/2 + clipz ] ) { cube( clipcs, center=true ); }
 // }
 
+// this renders the entire thing
+mount( );
